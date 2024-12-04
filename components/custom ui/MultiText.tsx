@@ -1,32 +1,30 @@
-"use client";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-
-interface multiTextProps {
+interface MultiTextProps {
   placeholder: string;
   value: string[];
-  onChange: (value: string) => void;
-  onRemove: (value: string) => void;
+  onChange: (value: string[]) => void; 
 }
-const MultiText: React.FC<multiTextProps> = ({
+
+const MultiText: React.FC<MultiTextProps> = ({
   placeholder,
   value,
   onChange,
-  onRemove,
 }) => {
   const [inputValue, setInputValue] = useState("");
-
-  const addTag = (item: string) => {
-    if (item) {
-      onChange(item);
-      setInputValue(""); // Di chuyển việc setInputValue ra ngoài render
+  const handleAdd = () => {
+    if (inputValue.trim() && !value.includes(inputValue)) {
+      onChange([...value, inputValue.trim()]);
+      setInputValue("");
     }
+  };
+  const handleRemove = (item: string) => {
+    onChange(value.filter((tag) => tag !== item));
   };
 
   return (
-    <>
+    <div>
       <Input
         placeholder={placeholder}
         value={inputValue}
@@ -34,30 +32,25 @@ const MultiText: React.FC<multiTextProps> = ({
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
-            addTag(inputValue);
+            handleAdd();
           }
         }}
       />
-      <div className="flex flex-wrap gap-3 mt-2">
+      <div className="flex flex-wrap gap-2 mt-2">
         {value.map((tag, index) => (
-          <div key={index} className="flex justify-between">
-            <Badge
-              variant="outline"
-              className="flex justify-between text-black"
+          <Badge key={index} className="flex items-center bg-white text-black">
+            {tag}
+            <button
+              type="button"
+              className="ml-4 p-1 text-red-300 hover:text-red-500"
+              onClick={() => handleRemove(tag)}
             >
-              {tag}
-              <Button
-                size="sm"
-                className="text-black bg-white w-5 h-5 ml-4 hover:bg-red-500 hover:text-white"
-                onClick={() => onRemove(tag)}
-              >
-                X
-              </Button>
-            </Badge>
-          </div>
+              X
+            </button>
+          </Badge>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

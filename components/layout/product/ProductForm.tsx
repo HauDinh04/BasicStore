@@ -227,17 +227,7 @@ const ProductForm: React.FC<initialDataProps> = ({ initialData }) => {
                     <MultiText
                       placeholder="Chất liệu sản phẩm ..."
                       value={field.value}
-                      onChange={(material) =>
-                        field.onChange([...field.value, material])
-                      }
-                      onRemove={(materialToRemove) => {
-                        const updatedMaterials = field.value.filter(
-                          (item) => item !== materialToRemove
-                        );
-                        if (updatedMaterials.length !== field.value.length) {
-                          field.onChange(updatedMaterials);
-                        }
-                      }}
+                      onChange={field.onChange}
                     />
                   </FormControl>
 
@@ -253,18 +243,9 @@ const ProductForm: React.FC<initialDataProps> = ({ initialData }) => {
                   <FormLabel>Từ Khóa </FormLabel>
                   <FormControl>
                     <MultiText
-                      placeholder="Từ khóa tìm kiếm ..."
+                      placeholder="Nhập từ khóa..."
                       value={field.value}
-                      onChange={(tag) => field.onChange([...field.value, tag])}
-                      onRemove={(tagToRemove) => {
-                        // Kiểm tra nếu có sự thay đổi thực sự mới
-                        const updatedTags = field.value.filter(
-                          (tag) => tag !== tagToRemove
-                        );
-                        if (updatedTags.length !== field.value.length) {
-                          field.onChange(updatedTags); // Chỉ gọi onChange khi có sự thay đổi thực sự
-                        }
-                      }}
+                      onChange={field.onChange}
                     />
                   </FormControl>
 
