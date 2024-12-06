@@ -17,11 +17,21 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const formSchema = z.object({
   userName: z.string().min(2),
   email: z.string().min(2).max(50),
   password: z.string(),
+  role: z.enum(["admin", "viewer", "creator", "editor"]),
 });
 
 const RegisterForm = () => {
@@ -33,6 +43,7 @@ const RegisterForm = () => {
       userName: "",
       email: "",
       password: "",
+      role: undefined,
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -47,15 +58,14 @@ const RegisterForm = () => {
       });
       if (res.ok) {
         console.log("ok");
-        toast.success("Success message!", { position: "top-center" });
+        toast.success("Tạo Thành Công !", { position: "top-right" });
         setLoading(false);
 
         router.push("/login");
       }
     } catch (err) {
-
       console.log("[POST_err]", err);
-      toast.error('Lỗi đăng kí , hãy thử lại')
+      toast.error("Lỗi đăng kí , hãy thử lại");
     }
   }
 
@@ -100,6 +110,36 @@ const RegisterForm = () => {
                   <FormLabel>password</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={field.value || undefined}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Chọn </SelectLabel>
+                          <SelectItem value="admin">admin</SelectItem>
+                          <SelectItem value="viewer">viewer</SelectItem>
+                          <SelectItem value="creator">creator</SelectItem>
+                          <SelectItem value="editor">editor</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
 
                   <FormMessage />

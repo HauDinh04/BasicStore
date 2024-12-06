@@ -20,6 +20,7 @@ import TitleHeader from "../../custom ui/TitleHeader";
 import { useEffect, useState } from "react";
 import MultiText from "@/components/custom ui/MultiText";
 import MultiSelect from "@/components/custom ui/MultiSelect";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   title: z
@@ -140,7 +141,9 @@ const ProductForm: React.FC<initialDataProps> = ({ initialData }) => {
         body: JSON.stringify(values),
       });
       if (res.ok) {
+        toast.success('Tạo Thành Công')
         window.location.href = "/products";
+
       }
     } catch (err) {
       console.error("server fail", err);

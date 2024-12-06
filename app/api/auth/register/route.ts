@@ -12,6 +12,7 @@ export const POST = async (req: NextRequest) => {
     await ConnectToDB();
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
+     
       return new NextResponse("Email đã tồn tại", { status: 400 });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -20,8 +21,6 @@ export const POST = async (req: NextRequest) => {
       email,
       password: hashedPassword,
     });
-
-    // await createUser.save();
     return NextResponse.json(createUser, { status: 201 });
   } catch (err) {
     console.log("[POST_register]", err);

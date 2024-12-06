@@ -49,6 +49,7 @@ export const POST = async (req: NextRequest) => {
         );
       })
     );
+    
     await createProduct.save();
     return NextResponse.json(createProduct, { status: 200 });
   } catch (err) {

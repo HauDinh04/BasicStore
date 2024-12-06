@@ -3,6 +3,7 @@
 import Delete from "@/components/custom ui/Delete";
 import Categories from "@/lib/models/Category";
 import { ColumnDef } from "@tanstack/react-table";
+import { Span } from "next/dist/trace";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,6 +22,13 @@ export const columns: ColumnDef<ProductType>[] = [
         </Link>
       );
     },
+  },
+  {
+    accessorKey: "categories",
+    header: "Danh Mục",
+    cell: ({ row }) =>  row.original.categories.map((category)=>category.title).join(' / ')
+      
+    
   },
   {
     accessorKey: "media",

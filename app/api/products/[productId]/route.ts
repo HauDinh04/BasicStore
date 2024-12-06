@@ -55,8 +55,8 @@ export const POST = async (
 ) => {
   try {
     await ConnectToDB();
-    const productId = await Products.findById(params.productId);
-    if (!productId) {
+    const existingProduct = await Products.findById(params.productId);
+    if (!existingProduct) {
       console.log("[not found this product");
     }
     const {
@@ -73,6 +73,17 @@ export const POST = async (
     if (!title || !media || !price || !material || !categories) {
       return new NextResponse("cant not update ", { status: 400 });
     }
+    const oldCategories = existingProduct.categories || [];
+    await Categories.updateMany(
+      { _id: { $in: oldCategories } },
+      {
+        $pull: { products: params.productId },
+      }
+    );
+    await Categories.updateMany(
+      { _id: { $in: categories } },
+      { $addToSet: { products: params.productId } }
+    );
     const updateProduct = await Products.findByIdAndUpdate(
       params.productId,
       {
@@ -88,6 +99,7 @@ export const POST = async (
       },
       { new: true }
     );
+
     return NextResponse.json(updateProduct, { status: 201 });
   } catch (err) {
     console.log("[update_product]", err);
