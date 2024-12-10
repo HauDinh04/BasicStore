@@ -5,8 +5,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
-  // SidebarGroupLabel,
+
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -20,10 +19,17 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { navLink } from "@/constants/sideBar";
-import { ChevronDown, ChevronUp, User2 } from "lucide-react";
-import { Collapsible, CollapsibleTrigger } from "../ui/collapsible";
+import { ChevronDown, ChevronUp} from "lucide-react";
+import { Collapsible } from "../ui/collapsible";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 export function AppSidebar() {
+  const { data: session } = useSession();
+  const userName = session?.user?.name || "UserName";
+  const handleLogOut = () => {
+    signOut({ callbackUrl: "/login" });
+  };
+
   return (
     <>
       <Sidebar className="shadow-xl ">
@@ -81,7 +87,12 @@ export function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    <User2 /> Username
+                    <div className="flex justify-between">
+                      <h3 className="font-semibold">Hello:</h3>
+                      <span>{userName}</span>
+                      
+                    </div>
+
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -96,14 +107,10 @@ export function AppSidebar() {
                   </DropdownMenuItem>
 
                   <DropdownMenuItem>
-                    <Link href={"/login"}>
-                      {" "}
-                      <span>Đăng Xuất</span>
-                    </Link>
+                    <a onClick={handleLogOut}>Đăng Xuất</a>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link href={"/register"}>
-                      {" "}
                       <span>Đăng Kí</span>
                     </Link>
                   </DropdownMenuItem>

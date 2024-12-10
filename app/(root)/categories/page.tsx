@@ -4,8 +4,8 @@ import { columns } from "@/components/layout/category/columns";
 import { DataTable } from "@/components/layout/category/data-table";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
 import React, { useEffect, useState } from "react";
+import type { Metadata } from "next";
 
 const CategoryPage = () => {
   const [loading, setLoading] = useState(false);
